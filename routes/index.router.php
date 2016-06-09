@@ -1,8 +1,12 @@
 <?php
 use models\Line;
-use lib\Config;
+
+$app->get('/', function(){
+    echo "hello";
+});
 
 $app->get('/callback', function(){
+    file_put_contents("/tmp/kouta.txt", "post");
     $json_string = file_get_contents('php://input');
     $json_object = json_decode($json_string);
     $content = $json_object->result{0}->content;
@@ -19,5 +23,6 @@ $app->get('/callback', function(){
 });
 
 $app->post('/callback', function($text){
+    file_put_contents("/tmp/kouta.txt", "post");
     Line::api_send_line(Config::read('line.send_id'), $text);
 });

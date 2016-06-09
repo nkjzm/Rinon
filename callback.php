@@ -2,6 +2,8 @@
 require_once "config.php";
 require_once "model/Line.php";
 
+$Line = new Line($GLOBALS['channel_id'], $GLOBALS['channel_secret'], $GLOBALS['mid']);
+
 if(isset($_POST['type'])){
     $type = $_POST['type'];
 }
@@ -20,10 +22,10 @@ switch ($type){
         $content_type = $content->contentType;
 
         // ユーザ情報取得
-        $userData = Line::api_get_user_profile_request($from);
+        $userData = $Line->api_get_user_profile_request($from);
         break;
 }
 
 // 受信メッセージに応じて返すメッセージを変更
-Line::api_send_line($text);
+$Line->api_send_line($GLOBALS['send_id'], $text);
 ?>

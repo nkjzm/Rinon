@@ -1,5 +1,7 @@
 <?php
+namespace models;
 require_once 'Mail/mimeDecode.php';
+
 class Mail
 {
     public static function parseMailData($data){

@@ -36,8 +36,8 @@ $app->post('/callback', function(){
 function dialogue($message, $context) {
     $post_data = array(
         'utt' => $message,
-        "mode" => "dialog",
-        'context' => $context
+        'context' => $context,
+        "t" => "20"
     );
     // DOCOMOに送信
     $ch = curl_init("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=". Config::read('docomo.api_key'));

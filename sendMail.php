@@ -1,7 +1,7 @@
 <?php
 
-require_once "model/Mail.php";
-require_once "model/Http.php";
+require_once "models/Mail.php";
+require_once "models/Http.php";
 
 $mail = Mail::parseMailData(file_get_contents("php://stdin"));
 

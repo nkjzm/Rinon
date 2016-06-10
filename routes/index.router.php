@@ -34,25 +34,18 @@ $app->post('/callback', function(){
 });
 
 function dialogue($message, $context) {
-    $api_url = sprintf('https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=', Config::read('docomo.api_key'));
-    $req_body = array(
+    $post_data = array(
         'utt' => $message,
-        'context' => $context,
+        'context' => $context
     );
-    $req_body['context'] = $message;
-
-    $headers = array(
-        'Content-Type: application/json; charset=UTF-8',
-    );
-    $options = array(
-        'http'=>array(
-            'method'  => 'POST',
-            'header'  => implode("\r\n", $headers),
-            'content' => json_encode($req_body),
-        )
-    );
-    $stream = stream_context_create($options);
-    $res = json_decode(file_get_contents($api_url, false, $stream));
-
-    return $res;
+    // DOCOMOに送信
+    $ch = curl_init("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=". Config::read('docomo.api_key'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json; charser=UTF-8"
+    ]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($result);
 }

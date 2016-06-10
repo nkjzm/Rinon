@@ -7,7 +7,7 @@ $app->get('/', function(){
 });
 
 $app->get('/callback', function(){
-    file_put_contents("/tmp/kouta.txt", "get");
+    file_put_contents("/tmp/kouta.txt", Config::read('line.send_id'));
     Line::api_send_line(Config::read('line.send_id'), "aaaa");
 });
 

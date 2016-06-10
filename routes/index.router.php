@@ -1,4 +1,6 @@
 <?php
+use models\Line;
+use lib\Config;
 
 $app->get('/', function(){
     echo "hello";
@@ -18,7 +20,7 @@ $app->post('/callback', function(){
     $from = $content->from;
     $message_id = $content->id;
     $content_type = $content->contentType;
-    file_put_contents("/tmp/kouta.txt", $text);
+    file_put_contents("/tmp/kouta.txt", Config::read('line.send_id'));
 
-    // Line::api_send_line(Config::read('line.send_id'), "aaaa");
+    Line::api_send_line(Config::read('line.send_id'), "aaaa");
 });

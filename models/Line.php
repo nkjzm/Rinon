@@ -5,7 +5,7 @@ use lib\Config;
 class Line
 {
     public static function api_send_line($send_id, $text){
-        file_put_contents("/tmp/kouta.txt", $text);
+        $text = json_encode($text);
         $post = <<< EOM
         {
             {$send_id},

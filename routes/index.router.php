@@ -8,8 +8,7 @@ $app->get('/', function(){
 
 $app->get('/callback', function(){
     $response = dialogue("はろー");
-    file_put_contents("/tmp/kouta.txt", $response->utt);
-    Line::api_send_line(Config::read('line.send_id'), json_encode($response->utt));
+    Line::api_send_line(Config::read('line.send_id'), $response->utt);
 });
 
 $app->post('/callback', function(){

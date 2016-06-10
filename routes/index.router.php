@@ -14,25 +14,20 @@ $app->get('/callback', function(){
 });
 
 $app->post('/callback', function(){
-    $json_string = file_get_contents('php://input');
-    $json_object = json_decode($json_string);
-    $content = $json_object->result{0}->content;
-    $text = $content->text;
-    $text = '"'. $text .'"';
-    $from = $content->from;
-    $message_id = $content->id;
-    $content_type = $content->contentType;
+    $type = $_POST['type'] ?? 'default';
+    switch ($type) {
+        case "default":
+            $text = defaultTalk();
+            break;
+        case "send":
+            $text = $_POST['message'];
+            break;
+        default:
+            $text = "エラー";
 
-    $redis = new Predis\Client(array(
-            "scheme" => "tcp",
-            "host" => "127.0.0.1",
-            "port" => 6379)
-    );
-    $context = $redis->get($from);
-    $response = dialogue($text, $context);
-    $redis->set($from, $response->context);
+    }
 
-    Line::api_send_line(Config::read('line.send_id'), $response->utt);
+    Line::api_send_line(Config::read('line.send_id'), $text);
 });
 
 $app->post('/mailReception', function(){
@@ -60,6 +55,27 @@ $app->post('/mailReception', function(){
     );
     Http::post($url, $postdata);
 });
+
+function defaultTalk (){
+    $json_string = file_get_contents('php://input');
+    $json_object = json_decode($json_string);
+    $content = $json_object->result{0}->content;
+    $text = $content->text;
+    $text = '"'. $text .'"';
+    $from = $content->from;
+    $message_id = $content->id;
+    $content_type = $content->contentType;
+
+    $redis = new Predis\Client(array(
+            "scheme" => "tcp",
+            "host" => "127.0.0.1",
+            "port" => 6379)
+    );
+    $context = $redis->get($from);
+    $response = dialogue($text, $context);
+    $redis->set($from, $response->context);
+    return $response->utt;
+}
 
 function dialogue($message, $context) {
     $post_data = array(

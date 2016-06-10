@@ -18,7 +18,7 @@ class Line
             }
         }
 EOM;
-        api_post_request("/v1/events", $post);
+        Line::api_post_request("/v1/events", $post);
     }
 
     public static function api_post_request($path, $post) {

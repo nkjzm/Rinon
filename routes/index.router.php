@@ -1,5 +1,7 @@
 <?php
 use models\Line;
+use models\Mail;
+use models\Http;
 use lib\Config;
 
 $app->get('/', function(){
@@ -33,6 +35,32 @@ $app->post('/callback', function(){
     Line::api_send_line(Config::read('line.send_id'), $response->utt);
 });
 
+$app->post('/mailReception', function(){
+    $mail = Mail::parseMailData(file_get_contents('php://input'));
+    $array = explode("\n", $mail['body']); // とりあえず行に分割
+    $array = array_map('trim', $array); // 各行にtrim()をかける
+    $array = array_filter($array, 'strlen'); // 文字数が0の行を取り除く
+    $array = array_values($array); //キーを連番に振りなおし
+    if(!array_search('りのんオフィシャルブログ「りのんとのんのん」Powered by Ameba の記事が更新されました。', $array)){
+        return;
+    }
+    $string = "なかじくん！頑張ってブログ更新したよ♡\n";
+    foreach($array as $key => $value) {
+        if(preg_match("/記事タイトル/", $value)) {
+            $string .= $value;
+        }
+    }
+    $key = array_search('▼ブログを見る', $array);
+    $string .= "\n" . $array[$key + 1];
+    $string .= "\n是非読んでね♡";
+    $url = "https://menhera.me/nakaji/callback.php";
+    $postdata = array(
+        "type" => "send",
+        "message" => $string
+    );
+    Http::post($url, $postdata);
+});
+
 function dialogue($message, $context) {
     $post_data = array(
         'utt' => $message,
@@ -48,7 +76,5 @@ function dialogue($message, $context) {
     ]);
     $result = curl_exec($ch);
     curl_close($ch);
-    file_put_contents("/tmp/res.txt", $result);
-    file_put_contents("/tmp/req.txt", json_encode($post_data));
     return json_decode($result);
 }

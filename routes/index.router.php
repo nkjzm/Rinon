@@ -21,5 +21,5 @@ $app->post('/callback', function(){
     $message_id = $content->id;
     $content_type = $content->contentType;
 
-    Line::api_send_line(Config::read('line.send_id'), "aaaa");
+    Line::api_send_line(Config::read('line.send_id'), $text);
 });

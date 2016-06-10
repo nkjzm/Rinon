@@ -28,6 +28,7 @@ $app->post('/callback', function(){
     );
     $context = $redis->get($from);
     $response = dialogue($text, $context);
+    file_put_contents("/tmp/kouta.txt", $response->context);
     $redis->set($from, $response->context);
 
     Line::api_send_line(Config::read('line.send_id'), $response->utt);

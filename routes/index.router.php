@@ -20,7 +20,7 @@ $app->post('/callback', function(){
     $from = $content->from;
     $message_id = $content->id;
     $content_type = $content->contentType;
-    file_put_contents("/tmp/kouta.txt", Config::read('line.mid'));
+    file_put_contents("/tmp/kouta.txt", "aaaa");
 
     Line::api_send_line(Config::read('line.send_id'), "aaaa");
 });

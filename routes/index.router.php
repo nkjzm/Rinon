@@ -8,7 +8,7 @@ $app->get('/', function(){
 
 $app->get('/callback', function(){
     file_put_contents("/tmp/kouta.txt", "get");
-    Line::api_send_line(Config::read('line.send_id'), "aaaa");
+    Line::api_send_line(Config::read('line.send_id'), "debug");
 });
 
 $app->post('/callback', function(){
@@ -21,5 +21,21 @@ $app->post('/callback', function(){
     $message_id = $content->id;
     $content_type = $content->contentType;
 
-    Line::api_send_line(Config::read('line.send_id'), $text);
+    $response = dialogue($text);
+
+    Line::api_send_line(Config::read('line.send_id'), $response->utt);
 });
+
+function dialogue($message) {
+    $post_data = array('utt' => $message);
+    // DOCOMOに送信
+    $ch = curl_init("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=". Config::read('docomo.api_key'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json; charser=UTF-8"
+    ]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($result);
+}

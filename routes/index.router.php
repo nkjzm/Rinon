@@ -1,6 +1,4 @@
 <?php
-use models\Line;
-use lib\Config;
 
 $app->get('/', function(){
     echo "hello";

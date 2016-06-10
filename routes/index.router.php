@@ -21,13 +21,21 @@ $app->post('/callback', function(){
     $message_id = $content->id;
     $content_type = $content->contentType;
 
-    $response = dialogue($text);
+    $redis = new Predis\Client(array(
+            "scheme" => "tcp",
+            "host" => "127.0.0.1",
+            "port" => 6379)
+    );
+    $context = $redis->get($from);
+    $response = dialogue($text, $context);
+    $redis->set($from, $response->context);
 
     Line::api_send_line(Config::read('line.send_id'), $response->utt);
 });
 
-function dialogue($message) {
+function dialogue($message, $context) {
     $post_data = array('utt' => $message);
+    $post_data['context'] = $context;
     // DOCOMOに送信
     $ch = curl_init("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=". Config::read('docomo.api_key'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -47,6 +47,7 @@ function dialogue($message, $context) {
     ]);
     $result = curl_exec($ch);
     curl_close($ch);
-    file_put_contents("/tmp/kouta.txt", $result);
+    file_put_contents("/tmp/res.txt", $result);
+    file_put_contents("/tmp/req.txt", json_encode($post_data));
     return json_decode($result);
 }

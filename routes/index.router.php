@@ -36,7 +36,7 @@ $app->post('/callback', function(){
 function dialogue($message, $context) {
     $post_data = array(
         'utt' => $message,
-        'context' =>$context
+        'context' => $context
     );
     // DOCOMOに送信
     $ch = curl_init("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=". Config::read('docomo.api_key'));
@@ -47,5 +47,6 @@ function dialogue($message, $context) {
     ]);
     $result = curl_exec($ch);
     curl_close($ch);
+    file_put_contents("/tmp/kouta.txt", $result);
     return json_decode($result);
 }

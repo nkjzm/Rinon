@@ -6,7 +6,11 @@ $app->get('/', function(){
 });
 
 $app->get('/callback', function(){
-    file_put_contents("/tmp/kouta.txt", "post");
+    file_put_contents("/tmp/kouta.txt", "get");
+    // Line::api_send_line(Config::read('line.send_id'), "aaaa");
+});
+
+$app->post('/callback', function(){
     $json_string = file_get_contents('php://input');
     $json_object = json_decode($json_string);
     $content = $json_object->result{0}->content;
@@ -16,13 +20,5 @@ $app->get('/callback', function(){
     $message_id = $content->id;
     $content_type = $content->contentType;
 
-    // ユーザ情報取得
-    $userData = Line::api_get_user_profile_request($from);
-
-    Line::api_send_line(Config::read('line.send_id'), $text);
-});
-
-$app->post('/callback', function($text){
-    file_put_contents("/tmp/kouta.txt", "post");
-    Line::api_send_line(Config::read('line.send_id'), $text);
+    Line::api_send_line(Config::read('line.send_id'), "aaaa");
 });

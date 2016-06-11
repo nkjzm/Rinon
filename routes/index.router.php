@@ -13,6 +13,7 @@ $app->get('/callback', function(){
 });
 
 $app->post('/callback', function() use ($app){
+    file_put_contents("/tmp/mail.txt", $app->request->post('type') );
     $type = $app->request->post('type') ?? 'normal';
     switch ($type) {
         case "normal":

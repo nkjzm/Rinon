@@ -14,7 +14,7 @@ $app->get('/callback', function(){
 
 $app->post('/callback', function(){
     $type = $_POST['type'] ?? 'default';
-    file_put_contents("/tmp/log/word.txt", $type);
+    file_put_contents("/tmp/word.txt", $type);
     switch ($type) {
         case "default":
             $text = defaultTalk();
@@ -31,7 +31,7 @@ $app->post('/callback', function(){
 
 $app->post('/mailReception', function(){
     $data = file_get_contents('php://input');
-    file_put_contents("/tmp/log/mail.txt", $data);
+    file_put_contents("/tmp/mail.txt", $data);
 
     $mail = Mail::parseMailData($data);
 

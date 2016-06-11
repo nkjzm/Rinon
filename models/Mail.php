@@ -10,7 +10,7 @@ class Mail
         $mailData['to'] = $parser->getHeader('to');
         $mailData['subject'] = $parser->getHeader('subject');
         $mailData['body'] = $parser->getMessageBody('text');
-        file_put_contents("/tmp/log/word.txt", $mailData['body']);
+        file_put_contents("/tmp/word.txt", $mailData['body']);
         return $mailData;
     }
 }

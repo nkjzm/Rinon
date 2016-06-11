@@ -3,13 +3,23 @@ use models\Line;
 use models\Mail;
 use models\Http;
 use lib\Config;
+use MimeMailParser\Parser;
 
 $app->get('/', function(){
     echo "hello";
 });
 
 $app->get('/callback', function(){
-    Line::api_send_line(Config::read('line.send_id'), "はろー");
+    $parser = new Parser();
+    $parser->setText(file_get_contents('/tmp/mail.txt'));
+
+    $data['to'] = $parser->getHeader('to');
+    $data['delivered_to'] = $parser->getHeader('delivered-to');
+    $data['from'] = $parser->getHeader('from');
+    $data['subject'] = $parser->getHeader('subject');
+    $data['text'] = $parser->getMessageBody('text');
+    $data['html'] = $parser->getMessageBody('html');
+    var_dump($data);
 });
 
 $app->post('/callback', function() use ($app){

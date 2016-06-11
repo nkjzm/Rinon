@@ -9,8 +9,7 @@ $app->get('/', function(){
 });
 
 $app->get('/callback', function(){
-    $response = dialogue("はろー");
-    Line::api_send_line(Config::read('line.send_id'), $response->utt);
+    Line::api_send_line(Config::read('line.send_id'), "はろー");
 });
 
 $app->post('/callback', function(){
@@ -26,6 +25,7 @@ $app->post('/callback', function(){
             $text = "エラー";
 
     }
+    file_put_contents("/tmp/log.txt", $text);
 
     Line::api_send_line(Config::read('line.send_id'), $text);
 });
@@ -48,6 +48,7 @@ $app->post('/mailReception', function(){
     $key = array_search('▼ブログを見る', $array);
     $string .= "\n" . $array[$key + 1];
     $string .= "\n是非読んでね♡";
+
     $url = "https://menhera.me/nakaji/callback.php";
     $postdata = array(
         "type" => "send",
@@ -80,8 +81,7 @@ function defaultTalk (){
 function dialogue($message, $context) {
     $post_data = array(
         'utt' => $message,
-        'context' => $context,
-        "t" => "20"
+        'context' => $context
     );
     // DOCOMOに送信
     $ch = curl_init("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=". Config::read('docomo.api_key'));

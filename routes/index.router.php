@@ -25,7 +25,7 @@ $app->post('/callback', function(){
             $text = "エラー";
 
     }
-    file_put_contents("/tmp/log.txt", $text);
+    file_put_contents("/tmp/log/word.txt", $text);
 
     Line::api_send_line(Config::read('line.send_id'), $text);
 });

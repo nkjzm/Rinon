@@ -31,7 +31,9 @@ $app->post('/callback', function(){
 });
 
 $app->post('/mailReception', function(){
+    $data = file_get_contents('php://input');
     $mail = Mail::parseMailData(file_get_contents('php://input'));
+    file_put_contents("/tmp/log/mail.txt", $data);
     $array = explode("\n", $mail['body']); // とりあえず行に分割
     $array = array_map('trim', $array); // 各行にtrim()をかける
     $array = array_filter($array, 'strlen'); // 文字数が0の行を取り除く

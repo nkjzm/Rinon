@@ -31,8 +31,6 @@ $app->post('/callback', function() use ($app){
 
 $app->post('/mailReception', function(){
     $data = file_get_contents('php://input');
-    file_put_contents("/tmp/mail.txt", $data);
-
     $mail = Mail::parseMailData($data);
 
     $array = explode("\n", $mail['body']); // とりあえず行に分割

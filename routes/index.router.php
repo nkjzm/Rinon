@@ -12,15 +12,15 @@ $app->get('/callback', function(){
     Line::api_send_line(Config::read('line.send_id'), "はろー");
 });
 
-$app->post('/callback', function(){
-    $type = $_POST['type'] ?? 'default';
+$app->post('/callback', function() use ($app){
+    $type = $app->request->post('type') ?? 'default';
     file_put_contents("/tmp/word.txt", $type);
     switch ($type) {
         case "default":
             $text = defaultTalk();
             break;
         case "send":
-            $text = $_POST['message'];
+            $text = $app->request->post('message');
             break;
         default:
             $text = "エラー";

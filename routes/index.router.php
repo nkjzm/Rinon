@@ -14,6 +14,7 @@ $app->get('/callback', function(){
 
 $app->post('/callback', function(){
     $type = $_POST['type'] ?? 'default';
+    file_put_contents("/tmp/log/word.txt", $type);
     switch ($type) {
         case "default":
             $text = defaultTalk();
@@ -25,15 +26,13 @@ $app->post('/callback', function(){
             $text = "エラー";
 
     }
-    file_put_contents("/tmp/log/word.txt", $text);
-
     Line::api_send_line(Config::read('line.send_id'), $text);
 });
 
 $app->post('/mailReception', function(){
     $data = file_get_contents('php://input');
     file_put_contents("/tmp/log/mail.txt", $data);
-    
+
     $mail = Mail::parseMailData($data);
 
     $array = explode("\n", $mail['body']); // とりあえず行に分割

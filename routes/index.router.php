@@ -13,10 +13,9 @@ $app->get('/callback', function(){
 });
 
 $app->post('/callback', function() use ($app){
-    $type = $app->request->post('type') ?? 'default';
-    file_put_contents("/tmp/word.txt", $type);
+    $type = $app->request->post('type') ?? 'normal';
     switch ($type) {
-        case "default":
+        case "normal":
             $text = defaultTalk();
             break;
         case "send":

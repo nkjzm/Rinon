@@ -1,6 +1,6 @@
 <?php
 namespace models;
-require_once 'Mail/mimeDecode.php';
+use MimeMailParser\Parser;
 
 class Mail
 {

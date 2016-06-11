@@ -1,12 +1,17 @@
 {
+  "repository":{
+    "type":"git",
+    "url":"https://github.com/php-mime-mail-parser/php-mime-mail-parser.git"
+  },
   "require": {
     "predis/predis": "1.0.3",
-    "slim/slim": "2.*"
+    "slim/slim": "2.*",
+    "exorus/php-mime-mail-parser":   "*",
+    "messaged/php-mime-mail-parser": "*"
   },
   "autoload":{
     "psr-0":{
-      "": "",
-      "MimeMailParser": "lib/"
+      "": ""
     }
   }
 }
